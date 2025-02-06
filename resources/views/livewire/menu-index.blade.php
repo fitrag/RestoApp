@@ -6,10 +6,10 @@
         </div>
     @endif
     @if ($isEdit && $menuId)
-            @php
-            $menu = \App\Models\Menu::find($menuId);
-            @endphp
-        @endif
+        @php
+        $menu = \App\Models\Menu::find($menuId);
+        @endphp
+    @endif
 
     <!-- Error Message -->
     @error('nama')
@@ -21,6 +21,16 @@
         </div>
     @enderror
 
+    <div wire:loading>
+        <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <!-- Spinner Loading -->
+            <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+        </div>
+    </div>
+
     <div class="bg-white rounded-md shadow-md">
         <h2 class="text-2xl font-semibold p-4 border-b border-gray-300">Kelola Menu Restoran</h2>
         <div class="p-6">
@@ -30,7 +40,42 @@
                 <label for="gambar" class="block text-sm font-medium text-gray-700">Gambar</label>
                 <div x-data="{ isDragging: false, showPreview: {{ $isEdit && $menuId ? 'true' : 'false' }} }">
                     <!-- Input File -->
-                    <div x-show="!showPreview">
+                    @if ($isEdit && $menuId)
+                    <div class="flex gap-x-4">
+                        <div class="mt-2 relative">
+                            <img src="{{ $gambar ? $gambar->temporaryUrl() : ($isEdit && $menuId ? asset('storage/' . $menu->gambar) : '') }}" alt="Preview Gambar" class="w-48 object-cover rounded-md">
+                        </div>
+                        <div class="flex-1">
+                            <div 
+                                @dragover="isDragging = true" 
+                                @dragleave="isDragging = false" 
+                                @drop="isDragging = false"
+                                class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg transition-colors duration-300 ease-in-out hover:border-blue-500 {{ $errors->has('gambar') ? 'border-red-500' : 'border-gray-300' }}"
+                                :class="isDragging ? 'border-blue-500 bg-blue-50' : ''">
+                                <div class="space-y-1 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex text-sm text-gray-600">
+                                        <label for="gambar" class="relative cursor-pointer rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                            <span>Upload a file</span>
+                                            <input id="gambar" name="gambar" type="file" wire:model="gambar" class="sr-only" @change="showPreview = true; isDragging = false">
+                                        </label>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @else
+                    <div class="flex gap-x-4">
+                        
+                    <!-- Preview Gambar -->
+                    <div class="mt-2 relative">
+                        <img src="{{ $gambar && !$isEdit ? $gambar->temporaryUrl() : 'https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg' }}" alt="Preview Gambar" class="w-48 object-cover rounded-md">
+                    </div>
+                    <div class="flex-1">
                         <div 
                             @dragover="isDragging = true" 
                             @dragleave="isDragging = false" 
@@ -52,19 +97,9 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Preview Gambar -->
-                    <div x-show="showPreview" class="mt-2 relative">
-                        <img src="{{ $gambar && !$isEdit ? $gambar->temporaryUrl() : ($isEdit && $menuId ? asset('storage/' . $menu->gambar) : '') }}" alt="Preview Gambar" class="w-full h-48 object-cover rounded-md">
-                        <button 
-                            type="button" 
-                            @click="showPreview = false; $wire.gambar = null" 
-                            class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
                     </div>
+                    @endif
+
                 </div>
 
                 <!-- Error Message -->

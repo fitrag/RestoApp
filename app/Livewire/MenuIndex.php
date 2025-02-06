@@ -68,6 +68,7 @@ class MenuIndex extends Component
         $this->kategori_id = $menu->kategori_id;
         $this->menuId = $menu->id;
         $this->isEdit = true;
+        $this->dispatch('showPreview', false);
     }
 
     public function update()
@@ -115,6 +116,9 @@ class MenuIndex extends Component
 
     public function render()
     {
-        return view('livewire.menu-index');
+        $this->menus = Menu::with('kategori')->get();
+        return view('livewire.menu-index', [
+            'menus' => $this->menus,
+        ]);
     }
 }

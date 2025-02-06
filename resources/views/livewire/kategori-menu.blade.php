@@ -16,6 +16,16 @@
         </div>
     @enderror
 
+    <div wire:loading>
+        <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <!-- Spinner Loading -->
+            <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+        </div>
+    </div>
+
     <div class="bg-white rounded-md shadow-md">
         <h2 class="text-2xl font-semibold p-4 border-b border-gray-300">Kelola Kategori Menu</h2>
         <div class="p-6">
@@ -47,7 +57,7 @@
                     <button type="submit" class="px-4 py-2 bg-gradient-to-r text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-md flex items-center justify-center w-full md:w-auto {{ $isEdit ? 'from-green-400 to-green-500 hover:from-green-600 hover:to-green-700' : 'from-blue-400 to-blue-500 hover:from-blue-600 hover:to-blue-700' }}">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
-                        </svg>
+                        </svg>  
                         {{ $isEdit ? 'Simpan Perubahan' : 'Buat Kategori Baru' }}
                     </button>
                 </form>
