@@ -168,7 +168,8 @@
         >
         <button 
             wire:click="applyCoupon" 
-            class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+            class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors {{ $discountApplied ? 'disabled cursor-not-allowed' : '' }}"
+            {{ $discountApplied ? 'disabled' : '' }}
         >
             Terapkan
         </button>
