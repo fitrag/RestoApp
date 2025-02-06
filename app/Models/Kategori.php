@@ -9,12 +9,10 @@ class Kategori extends Model
 {
     use HasFactory;
 
-    // Tentukan nama tabel jika berbeda dari konvensi plural
-    // protected $table = 'kategoris'; 
-
-    // Tentukan kolom yang boleh diisi (fillable) untuk menghindari mass-assignment vulnerability
     protected $fillable = ['nama'];
 
-    // Jika menggunakan timestamps otomatis, pastikan kolom created_at dan updated_at ada di tabel
-    // public $timestamps = false; // Jika tidak menggunakan timestamps
+    public function menus()
+    {
+        return $this->hasMany(Menu::class);
+    }
 }
